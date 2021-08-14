@@ -1,0 +1,20 @@
+#tab_plugin_printscheduler div.filelist div.span7.file_path {
+    padding-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#tab_plugin_printscheduler div.filelist div.span1.btn-group {
+    padding-top: 3px;
+    text-align: right;
+}
+
+#tab_plugin_printscheduler div.listheader div.listactions {
+    padding-top: 3px;
+    text-align: right;
+}
+
+#tab_plugin_printscheduler div.filelist input.changed {
+    border: 1px solid red;
+}

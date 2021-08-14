@@ -1,0 +1,21 @@
+<div class="row-fluid listheader">
+    <div class="span4">Start At</div>
+    <div class="span5 file_path">File</div>
+    <div class="span3 listactions">
+        <button class="btn btn-mini btn-primary" data-bind="click: settingsViewModel.saveData(), visible: needs_saving()" title="Save all changes."><i class="fa" data-bind="css: {'fa-save': !settingsViewModel.sending(), 'fa-spinner': settingsViewModel.sending(), 'fa-spin': settingsViewModel.sending()}"></i> Save</button>
+        <button class="btn btn-mini btn-danger" data-bind="click: removeAllJobs(), visible: settingsViewModel.settings.plugins.printscheduler.scheduled_jobs().length" title="Remove all scheduled prints."><i class="fa fa-trash-o"></i> Clear</button>
+    </div>
+</div>
+<div data-bind="foreach: settingsViewModel.settings.plugins.printscheduler.scheduled_jobs" class="row-fluid filelist">
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="controls">
+                <input type="datetime-local" class="input-block-level" data-bind="value: start_at, event: {change: $root.start_at_changed}, css: {'changed': $root.start_at_changed_for.indexOf($data.name()) > -1}" />
+            </div>
+        </div>
+        <div class="span7 file_path" data-bind="text: name, attr: {title: path}"></div>
+        <div class="span1 btn-group">
+            <button class="btn btn-mini btn-danger" data-bind="click: $root.removeJob" title="Remove scheduled print."><i class="fa fa-trash-o"></i></button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<h4>Print Scheduler <small>Version {{ plugin_printscheduler_plugin_version }}</small></h4>
+<div class="row-fluid">
+    <div class="control-group">
+        <label class="control-label">System Command Before Each Print</label>
+        <div class="controls">
+            <input type="text" class="input-block-level" data-bind="value: settingsViewModel.settings.plugins.printscheduler.system_command_before" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">GCODE Before Each Print</label>
+        <div class="controls">
+            <textarea class="input-block-level" rows="10" data-bind="value: settingsViewModel.settings.plugins.printscheduler.command_before"></textarea>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">GCODE After Each Print</label>
+        <div class="controls">
+            <textarea class="input-block-level" rows="10" data-bind="value: settingsViewModel.settings.plugins.printscheduler.command_after"></textarea>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">System Command After Each Print</label>
+        <div class="controls">
+            <input type="text" class="input-block-level" data-bind="value: settingsViewModel.settings.plugins.printscheduler.system_command_after" />
+        </div>
+    </div>
+</div>

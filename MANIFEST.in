@@ -1,0 +1,4 @@
+include README.md
+recursive-include octoprint_printscheduler/templates *
+recursive-include octoprint_printscheduler/translations *
+recursive-include octoprint_printscheduler/static *
