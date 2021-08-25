@@ -2,7 +2,7 @@
     <div class="span4">Start At</div>
     <div class="span5 file_path">File</div>
     <div class="span3 listactions">
-        <button class="btn btn-mini btn-primary" data-bind="click: settingsViewModel.saveData(), visible: needs_saving()" title="Save all changes."><i class="fa" data-bind="css: {'fa-save': !settingsViewModel.sending(), 'fa-spinner': settingsViewModel.sending(), 'fa-spin': settingsViewModel.sending()}"></i> Save</button>
+        <button class="btn btn-mini btn-primary" data-bind="click: settingsViewModel.saveData(), visible: needs_saving(), disable: settingsViewModel.sending()" title="Save all changes."><i class="fa" data-bind="css: {'fa-save': !settingsViewModel.sending(), 'fa-spinner': settingsViewModel.sending(), 'fa-spin': settingsViewModel.sending()}"></i> <span data-bind="text: settingsViewModel.sending() ? 'Saving' : 'Save'"></span></button>
         <button class="btn btn-mini btn-danger" data-bind="click: removeAllJobs(), visible: settingsViewModel.settings.plugins.printscheduler.scheduled_jobs().length" title="Remove all scheduled prints."><i class="fa fa-trash-o"></i> Clear</button>
     </div>
 </div>

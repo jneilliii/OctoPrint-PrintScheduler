@@ -41,10 +41,7 @@ $(function() {
 		self.removeAllJobs = function() {
 		    self.needs_saving(true);
 		    self.settingsViewModel.settings.plugins.printscheduler.scheduled_jobs.removeAll();
-        };
-
-		self.onSettingsBeforeSave = function(data){
-		    console.debug(data);
+		    self.settingsViewModel.saveData();
         };
 
 		self.onEventSettingsUpdated = function() {
