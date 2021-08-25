@@ -91,15 +91,15 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
         if isinstance(data.get("scheduled_jobs"), list):
             self._logger.debug("Sorthing scheduled jobs from: {}.".format(data["scheduled_jobs"]))
             data["scheduled_jobs"].sort(key=lambda item: datetime.fromisoformat(item.get("start_at")))
-            self._logger.debug("Sorthing scheduled jobs to: {}.".format(data["scheduled_jobs"]))
+            self._logger.debug("Sorting scheduled jobs to: {}.".format(data["scheduled_jobs"]))
         octoprint.plugin.SettingsPlugin.on_settings_save(self, dict_merge(self._settings.get([], merged=True), data))
 
     # ~~ AssetPlugin mixin
 
     def get_assets(self):
         return {
-            "js": ["js/printscheduler.js"],
-            "css": ["css/printscheduler.css"]
+            "js": ["js/jquery.datetimepicker.full.min.js", "js/ko.datetimepicker.js", "js/printscheduler.js"],
+            "css": ["css/jquery.datetimepicker.min.css", "css/printscheduler.css"]
         }
 
     # ~~ TemplatePlugin mixin
