@@ -13,6 +13,11 @@ $(function() {
 
 		self.needs_saving = ko.observable(false);
 		self.start_at_changed_for = ko.observableArray([]);
+		self.theme = ko.observable('default');
+
+		self.onBeforeBinding = function() {
+		    $.datetimepicker.setDateFormatter('moment');
+        };
 
 		self.onAllBound = function(data) {
 		    self.needs_saving(false);
@@ -37,6 +42,7 @@ $(function() {
 		self.removeAllJobs = function() {
 		    self.needs_saving(true);
 		    self.settingsViewModel.settings.plugins.printscheduler.scheduled_jobs.removeAll();
+		    self.settingsViewModel.saveData();
         };
 
 		self.onEventSettingsUpdated = function() {
