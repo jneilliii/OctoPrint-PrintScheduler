@@ -84,7 +84,8 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
             "command_before": "",
             "system_command_after": "",
             "system_command_before": "",
-            "scheduled_jobs": []
+            "scheduled_jobs": [],
+            "theme": "default"
         }
 
     def on_settings_save(self, data):
