@@ -5,7 +5,12 @@ from octoprint.util import RepeatedTimer
 from octoprint.events import Events
 from octoprint.util import dict_merge
 from datetime import datetime
+from backports.datetime_fromisoformat import MonkeyPatch
 
+try:
+    test = datetime.fromisoformat
+except AttributeError:
+    MonkeyPatch.patch_fromisoformat()
 
 class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
                            octoprint.plugin.AssetPlugin,
