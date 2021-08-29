@@ -6,7 +6,7 @@ ko.bindingHandlers.datetimepicker = {
         //handle the field changing
         ko.utils.registerEventHandler(element, "change", function () {
             var observable = valueAccessor();
-            observable(moment((element).datetimepicker("getValue"), "YYYY-MM-DD HH:mm"));
+            observable(moment($(element).datetimepicker("getValue"), "YYYY-MM-DD HH:mm"));
         });
 
         //handle disposal (if KO removes by the template binding)
