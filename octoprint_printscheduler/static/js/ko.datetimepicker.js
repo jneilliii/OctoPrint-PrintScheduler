@@ -4,10 +4,10 @@ ko.bindingHandlers.datetimepicker = {
         $(element).datetimepicker(options);
 
         //handle the field changing
-        ko.utils.registerEventHandler(element, "change", function () {
+/*        ko.utils.registerEventHandler(element, "change", function () {
             var observable = valueAccessor();
             observable(moment($(element).datetimepicker("getValue"), "YYYY-MM-DD HH:mm"));
-        });
+        });*/
 
         //handle disposal (if KO removes by the template binding)
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
