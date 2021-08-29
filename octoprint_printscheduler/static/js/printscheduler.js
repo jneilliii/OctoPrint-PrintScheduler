@@ -42,11 +42,18 @@ $(function() {
 		self.removeAllJobs = function() {
 		    self.needs_saving(true);
 		    self.settingsViewModel.settings.plugins.printscheduler.scheduled_jobs.removeAll();
+            self.settingsViewModel.settings.plugins.printscheduler.scheduled_jobs_need_saving = true;
+		    self.settingsViewModel.saveData();
+        };
+
+		self.saveScheduledJobs = function() {
+            self.settingsViewModel.settings.plugins.printscheduler.scheduled_jobs_need_saving = true;
 		    self.settingsViewModel.saveData();
         };
 
 		self.onEventSettingsUpdated = function() {
 		    self.needs_saving(false);
+		    self.settingsViewModel.settings.plugins.printscheduler.scheduled_jobs_need_saving = false;
 		    self.start_at_changed_for.removeAll();
         };
 
