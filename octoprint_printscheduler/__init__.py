@@ -5,7 +5,12 @@ from octoprint.util import RepeatedTimer
 from octoprint.events import Events
 from octoprint.util import dict_merge
 from datetime import datetime
+from backports.datetime_fromisoformat import MonkeyPatch
 
+try:
+    test = datetime.fromisoformat
+except AttributeError:
+    MonkeyPatch.patch_fromisoformat()
 
 class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
                            octoprint.plugin.AssetPlugin,
@@ -49,6 +54,7 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
         if scheduled_jobs != self._settings.get(["scheduled_jobs"]):
             self._logger.debug("Scheduled jobs changed to: {}".format(scheduled_jobs))
             self._settings.set(["scheduled_jobs"], scheduled_jobs)
+            self._settings.set(["scheduled_jobs_need_saving"], scheduled_jobs)
             self._settings.save(trigger_event=True)
 
     # ~~ StartupPlugin mixin
@@ -89,10 +95,13 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
         }
 
     def on_settings_save(self, data):
-        if isinstance(data.get("scheduled_jobs"), list):
-            self._logger.debug("Sorthing scheduled jobs from: {}.".format(data["scheduled_jobs"]))
+        if data.get("scheduled_jobs_need_saving", False) and isinstance(data["scheduled_jobs"], list):
+            self._logger.debug("Sorting scheduled jobs from: {}.".format(data["scheduled_jobs"]))
             data["scheduled_jobs"].sort(key=lambda item: datetime.fromisoformat(item.get("start_at")))
             self._logger.debug("Sorting scheduled jobs to: {}.".format(data["scheduled_jobs"]))
+
+        if data.get("scheduled_jobs_need_saving", False):
+            data.pop("scheduled_jobs_need_saving")
         octoprint.plugin.SettingsPlugin.on_settings_save(self, dict_merge(self._settings.get([], merged=True), data))
 
     # ~~ AssetPlugin mixin
