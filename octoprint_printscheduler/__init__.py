@@ -100,7 +100,8 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
             data["scheduled_jobs"].sort(key=lambda item: datetime.fromisoformat(item.get("start_at")))
             self._logger.debug("Sorting scheduled jobs to: {}.".format(data["scheduled_jobs"]))
 
-        data.pop("scheduled_jobs_need_saving")
+        if data.get("scheduled_jobs_need_saving", False):
+            data.pop("scheduled_jobs_need_saving")
         octoprint.plugin.SettingsPlugin.on_settings_save(self, dict_merge(self._settings.get([], merged=True), data))
 
     # ~~ AssetPlugin mixin

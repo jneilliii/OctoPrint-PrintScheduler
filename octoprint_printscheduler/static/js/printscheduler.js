@@ -26,7 +26,7 @@ $(function() {
 		self.start_at_changed = function(data){
 		    self.needs_saving(true);
 		    console.log(data);
-		    self.start_at_changed_for.push(data.name());
+		    self.start_at_changed_for.push(data.name() + '-' + data.start_at());
         };
 
 		self.filesViewModel.addToScheduledJobs = function(data) {
