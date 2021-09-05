@@ -33,20 +33,19 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
             self.repeated_timer.start()
 
     def check_scheduled_jobs(self):
-        if not self._printer.is_operational():
-            self._logger.debug("Bypassing scheduled jobs as printer is not available.")
-            return
-
         self._logger.debug("Looping through scheduled jobs.")
         scheduled_jobs = self._settings.get(["scheduled_jobs"])
         for job in scheduled_jobs:
             if datetime.fromisoformat(job["start_at"]) <= datetime.now() and job["start_at"] != "":
                 self._logger.debug("Job found: {}".format(job))
+                if self._settings.get(["system_command_before"]):
+                    os.system(self._settings.get(["system_command_before"]))
+                if not self._printer.is_operational():
+                    self._logger.debug("Bypassing scheduled job as printer is not available yet.")
+                    return
                 self.job_active = True
                 scheduled_jobs.remove(job)
                 self._printer.select_file(job["path"], False, tags={"printscheduler"})
-                if self._settings.get(["system_command_before"]):
-                    os.system(self._settings.get(["system_command_before"]))
                 self._printer.commands(self._settings.get(["command_before"]).split('\n'), tags={"printscheduler"})
                 self._printer.start_print(tags={"printscheduler"})
                 break
