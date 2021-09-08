@@ -39,6 +39,7 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
             if datetime.fromisoformat(job["start_at"]) <= datetime.now() and job["start_at"] != "":
                 self._logger.debug("Job found: {}".format(job))
                 if self._settings.get(["system_command_before"]):
+                    self._logger.debug("Running system command before print.")
                     os.system(self._settings.get(["system_command_before"]))
                 if not self._printer.is_operational():
                     self._logger.debug("Bypassing scheduled job as printer is not available yet.")
