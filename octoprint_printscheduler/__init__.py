@@ -68,7 +68,7 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
         if event not in [Events.PRINT_STARTED, Events.PRINT_DONE, Events.PRINT_CANCELLED, Events.PRINT_FAILED]:
             return
 
-        if event == Events.PRINT_STARTED:
+        if event == Events.PRINT_STARTED and self.repeated_timer is not None:
             self._logger.debug("Stopping repeated timer from event: {}.".format(event))
             self.repeated_timer.cancel()
             self.repeated_timer = None
