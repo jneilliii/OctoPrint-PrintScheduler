@@ -4,7 +4,7 @@ import os
 from octoprint.util import RepeatedTimer
 from octoprint.events import Events
 from octoprint.util import dict_merge
-from datetime import datetime
+from datetime import datetime, timedelta
 from backports.datetime_fromisoformat import MonkeyPatch
 
 try:
@@ -45,6 +45,11 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
                     self._logger.debug("Bypassing scheduled job as printer is not available yet.")
                     return
                 self.job_active = True
+                if self._settings.get_boolean(["repeat_daily"]):
+                    new_job = job
+                    new_job["start_at"] = (datetime.fromisoformat(job["start_at"]) + timedelta(days=1)).isoformat(sep=" ", timespec="minutes")
+                    self._logger.debug("Rescheduling job for next day: {}".format(new_job))
+                    scheduled_jobs.append(new_job)
                 scheduled_jobs.remove(job)
                 self._printer.select_file(job["path"], False, tags={"printscheduler"})
                 self._printer.commands(self._settings.get(["command_before"]).split('\n'), tags={"printscheduler"})
@@ -52,9 +57,10 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
                 break
 
         if scheduled_jobs != self._settings.get(["scheduled_jobs"]):
+            scheduled_jobs.sort(key=lambda item: datetime.fromisoformat(item.get("start_at")))
             self._logger.debug("Scheduled jobs changed to: {}".format(scheduled_jobs))
             self._settings.set(["scheduled_jobs"], scheduled_jobs)
-            self._settings.set(["scheduled_jobs_need_saving"], scheduled_jobs)
+            self._settings.set(["scheduled_jobs_need_saving"], False)
             self._settings.save(trigger_event=True)
 
     # ~~ StartupPlugin mixin
@@ -91,7 +97,8 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
             "system_command_after": "",
             "system_command_before": "",
             "scheduled_jobs": [],
-            "theme": "default"
+            "theme": "default",
+            "repeat_daily": False
         }
 
     def on_settings_save(self, data):
