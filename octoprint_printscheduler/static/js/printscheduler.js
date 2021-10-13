@@ -32,6 +32,9 @@ $(function() {
 		self.filesViewModel.addToScheduledJobs = function(data) {
 		    self.needs_saving(true);
 			self.settingsViewModel.settings.plugins.printscheduler.scheduled_jobs.push({name: ko.observable(data["name"]), path: ko.observable(data["path"]), start_at: ko.observable("")});
+            if(window.location.href.indexOf('#tab_plugin_printscheduler') < 0) {
+                $('#tab_plugin_printscheduler_link > a').tab('show');
+            }
 		};
 
 		self.removeJob = function(data) {
@@ -59,6 +62,10 @@ $(function() {
 		    self.start_at_changed_for.removeAll();
         };
 
+        self.show_tab = function(e) {
+            $('#tab_plugin_printscheduler_link > a').tab('show');
+        };
+
 		$(document).ready(function() {
 			let regex = /<div class="btn-group action-buttons">([\s\S]*)<.div>/mi;
 			let template = '<div class="btn btn-mini" data-bind="click: function() { if ($root.loginState.isUser()) { $root.addToScheduledJobs($data) } else { return; } }, css: {disabled: !$root.loginState.isUser()}" title="Add to Print Scheduler"><i class="fa fa-clock-o"></i></div>';
@@ -72,6 +79,6 @@ $(function() {
     OCTOPRINT_VIEWMODELS.push({
         construct: PrintschedulerViewModel,
         dependencies: ["settingsViewModel", "filesViewModel"],
-        elements: ["#tab_plugin_printscheduler", "#settings_plugin_printscheduler"]
+        elements: ["#tab_plugin_printscheduler", "#settings_plugin_printscheduler", "#navbar_plugin_printscheduler"]
     });
 });

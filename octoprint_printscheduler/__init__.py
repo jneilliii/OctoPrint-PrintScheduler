@@ -125,7 +125,7 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
         return {"plugin_version": self._plugin_version}
 
     def get_template_configs(self):
-        return [{"type": "tab", "custom_bindings": True}, {"type": "settings", "custom_bindings": True}]
+        return [{"type": "tab", "custom_bindings": True}, {"type": "settings", "custom_bindings": True}, {"type": "navbar", "custom_bindings": True, "data_bind": "visible: settingsViewModel.settings.plugins.printscheduler.scheduled_jobs().length > 0"}]
 
     # ~~ Softwareupdate hook
 
