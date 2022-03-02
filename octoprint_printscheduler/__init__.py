@@ -1,6 +1,7 @@
 # coding=utf-8
 import octoprint.plugin
 import os
+import time
 from octoprint.util import RepeatedTimer
 from octoprint.events import Events
 from octoprint.util import dict_merge
@@ -23,6 +24,7 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
         super().__init__()
         self.repeated_timer = None
         self.job_active = False
+        self._psu = None
 
     # ~~ Print Scheduler Functions
 
@@ -38,6 +40,11 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
         for job in scheduled_jobs:
             if datetime.fromisoformat(job["start_at"]) <= datetime.now() and job["start_at"] != "":
                 self._logger.debug("Job found: {}".format(job))
+                if self._settings.get(["psucontrol"]) and self._psu != None:
+                    self._psu["turn_psu_on"]()
+                    attempts = 30
+                    while not self._printer.is_operational():
+                        time.sleep(1)
                 if self._settings.get(["system_command_before"]):
                     self._logger.debug("Running system command before print.")
                     os.system(self._settings.get(["system_command_before"]))
@@ -60,6 +67,12 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
     # ~~ StartupPlugin mixin
 
     def on_after_startup(self):
+        helpers = self._plugin_manager.get_helpers("psucontrol", "turn_psu_on", "turn_psu_off", "get_psu_state")
+        if helpers != None:
+            self._logger.debug("Found PSUControl: PSU Control Available")
+            self._psu = helpers
+        else:
+            self._logger.debug("PSUControl not found")
         self.start_timer()
 
     # ~~ EventHandlerPlugin mixin
@@ -91,7 +104,8 @@ class PrintschedulerPlugin(octoprint.plugin.SettingsPlugin,
             "system_command_after": "",
             "system_command_before": "",
             "scheduled_jobs": [],
-            "theme": "default"
+            "theme": "default",
+            "psucontrol": False
         }
 
     def on_settings_save(self, data):
