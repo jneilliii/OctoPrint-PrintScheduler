@@ -17,14 +17,14 @@
     align-items: center;
 }
 
-#tab_plugin_printscheduler div.filelist div.changed {
-    ;
-}
-
 #tab_plugin_printscheduler > div.row-fluid.filelist > div:nth-child(1) {
     margin-top: 10px;
 }
 
 #tab_plugin_printscheduler > div.row-fluid.filelist > div.row-fluid > div.btn-group {
     margin-top: -10px;
+}
+
+#settings_plugin_printscheduler input.checkbox {
+    margin-top: 0;
 }
