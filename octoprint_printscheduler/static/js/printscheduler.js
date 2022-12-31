@@ -67,11 +67,15 @@ $(function() {
         };
 
 		$(document).ready(function() {
-			let regex = /<div class="btn-group action-buttons">([\s\S]*)<.div>/mi;
+			let regex = /<div class="btn-group action-buttons"(?: data-bind="css: 'cpq-' \+ display\.split\('\.'\)\[1\]")?>([\s\S]*)<\/div>/mi;
 			let template = '<div class="btn btn-mini" data-bind="click: function() { if ($root.loginState.isUser()) { $root.addToScheduledJobs($data) } else { return; } }, css: {disabled: !$root.loginState.isUser()}" title="Add to Print Scheduler"><i class="fa fa-clock-o"></i></div>';
 
 			$("#files_template_machinecode").text(function () {
-				return $(this).text().replace(regex, '<div class="btn-group action-buttons">$1	' + template + '></div>');
+                if($(this).text().indexOf('data-bind="css: \'cpq-\'') > 0) {
+                    return $(this).text().replace(regex, '<div class="btn-group action-buttons" data-bind="css: \'cpq-\' + display.split(\'.\')[1]">$1	' + template + '></div>');
+                } else {
+                    return $(this).text().replace(regex, '<div class="btn-group action-buttons">$1	' + template + '></div>');
+                }
 			});
         });
     }
